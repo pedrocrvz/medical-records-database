@@ -1,30 +1,30 @@
 package pt.ulisboa.tecnico.sirs;
 
-import java.util.Base64;
+import java.security.PublicKey;
 import java.util.Date;
 
 public class Record {
-    private final Doctor doctor;
-    private final Patient patient;
+    private final PublicKey doctorKey;
+    private final PublicKey patientKey;
     private final Date date;
     private final String record;
 
-    public Record(final Doctor doctor, final Patient patient, final String record) {
-        this.doctor = doctor;
-        this.patient = patient;
+    public Record(final PublicKey doctorKey, final PublicKey patientKey, final String record) {
+        this.doctorKey = doctorKey;
+        this.patientKey = patientKey;
         this.date = new Date();
         this.record = record;
     }
 
-    public byte[] getBytes(){
-        String doctorKey = doctor.getBase64PublicKey();
-        String patientKey = patient.getBase64PublicKey();
+    public final byte[] getBytes(){
+        String doctorKey = Entity.getBase64PublicKey(this.doctorKey);
+        String patientKey = Entity.getBase64PublicKey(this.patientKey);
 
         String object = doctorKey + patientKey + this.date.toString() + record;
         return object.getBytes();
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public final PublicKey getDoctorPublicKey() {
+        return doctorKey;
     }
 }

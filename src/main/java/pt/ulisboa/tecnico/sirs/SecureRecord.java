@@ -6,8 +6,8 @@ import java.security.Signature;
 import java.security.SignatureException;
 
 public class SecureRecord {
-    final private Record record;
-    final private byte[] signature;
+    private final Record record;
+    private final byte[] signature;
 
     public SecureRecord(Record record, byte[] signature){
         this.record = record;
@@ -23,8 +23,9 @@ public class SecureRecord {
      */
     public boolean hasValidSignature() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         byte[] object = record.getBytes();
-        Signature sig = Entity.getSignature();
-        sig.initVerify(record.getDoctor().getPublicKey());
+        Signature sig = Security.getSignature();
+        sig.initVerify(record.getDoctorPublicKey());
+        sig.update(object);
         return sig.verify(signature);
     }
 }

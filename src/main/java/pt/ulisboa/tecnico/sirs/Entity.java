@@ -40,17 +40,17 @@ public abstract class Entity {
         return assymetricKeys.getPublic();
     }
 
+    public String getBase64PublicKey(){
+        return getBase64PublicKey(this.getPublicKey());
+    }
+
     /**
      * This method returns this entity's PublicKey encoded in Base64
      * @return Returns PublicKey encoded in Base64
      */
-    public String getBase64PublicKey(){
-        byte[] publicKeyBytes = getPublicKey().getEncoded();
+    public static String getBase64PublicKey(PublicKey publicKey){
+        byte[] publicKeyBytes = publicKey.getEncoded();
         Base64.Encoder encoder = Base64.getEncoder();
         return encoder.encodeToString(publicKeyBytes);
-    }
-
-    public static Signature getSignature() throws NoSuchAlgorithmException {
-        return Signature.getInstance("SHA256WithRSA");
     }
 }
