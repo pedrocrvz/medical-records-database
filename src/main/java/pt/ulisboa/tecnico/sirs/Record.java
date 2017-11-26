@@ -19,6 +19,10 @@ public abstract class Record implements Serializable {
         this.record = record;
     }
 
+    /**
+     * This will be useful to 
+     * @return
+     */
     public final byte[] getBytes(){
         String doctorKey = Entity.getBase64PublicKey(this.doctorKey);
         String patientKey = Entity.getBase64PublicKey(this.patientKey);
