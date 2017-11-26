@@ -27,6 +27,8 @@ def create_nhs():
 	print("Generating NHS")
 	exec_command('keytool -genkeypair -alias NHS -keystore NHS.jks -storepass '+password+' -validity 400 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN=NHS -noprompt -keypass '+password+' -ext bc:c=ca:true  -ext eku=sA -storetype pkcs12')
 	exec_command('keytool -keystore NHS.jks -alias NHS -exportcert -rfc -storepass '+password+' > NHS.crt')
+	exec_command('keytool -import -file NHS.crt -alias NHS -keystore truststore.jks -storepass ' + password + ' -noprompt')
+	exec_command('keytool -genseckey -alias datastore -keypass '+password+'  -keyalg AES -keysize 128 -storepass '+password+' -keystore NHS.jks');
 
 def create_hospital(id, num_doctors):
 	entity = "Hospital-"+str(id)
