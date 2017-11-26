@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.sirs;
 
+import pt.ulisboa.tecnico.sirs.Entity;
+
 import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.Date;
@@ -20,8 +22,8 @@ public abstract class Record implements Serializable {
     }
 
     /**
-     * This will be useful to 
-     * @return
+     * This will be useful to sign records
+     * @return byte array which corresponds to this array
      */
     public final byte[] getBytes(){
         String doctorKey = Entity.getBase64PublicKey(this.doctorKey);

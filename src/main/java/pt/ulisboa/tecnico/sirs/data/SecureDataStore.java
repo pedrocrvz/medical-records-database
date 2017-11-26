@@ -1,10 +1,9 @@
 package pt.ulisboa.tecnico.sirs.data;
 
 import org.javatuples.Pair;
-import org.javatuples.Tuple;
 import pt.ulisboa.tecnico.sirs.Record;
 import pt.ulisboa.tecnico.sirs.SecureRecord;
-import pt.ulisboa.tecnico.sirs.exception.ServerCipherException;
+import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.AES;
 
 import javax.crypto.BadPaddingException;
@@ -17,6 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class implements the Interface DataStore
+ * All patient records are properly encrypted with the NHS symmetric key
+ * Records have different IV (Initialization Vector) to improve security, giving use of CBC-AES
+ */
 public class SecureDataStore implements DataStore {
     //TODO verify data integrity when decrypting the data! HMAC/signature
     private HashMap<PublicKey, List<Pair<SealedObject, byte[]>>> encryptedRecords;
@@ -28,7 +32,7 @@ public class SecureDataStore implements DataStore {
     }
 
     @Override
-    public final List<Record> getRecords(final PublicKey patientKey) throws ServerCipherException {
+    public final List<Record> getRecords(final PublicKey patientKey) throws SecurityLibraryException {
         createPatientListIfDoesNotExist(patientKey);
         List<Record> records = new ArrayList<>();
         for(Pair<SealedObject, byte[]> pair: encryptedRecords.get(patientKey))
@@ -38,14 +42,14 @@ public class SecureDataStore implements DataStore {
                     BadPaddingException | InvalidKeyException | IOException | IllegalBlockSizeException |
                     ClassNotFoundException e) {
                 e.printStackTrace();
-                throw new ServerCipherException();
+                throw new SecurityLibraryException(e);
             }
 
         return records;
     }
 
     @Override
-    public void putRecord(final PublicKey patientKey, final Record record) throws ServerCipherException {
+    public void putRecord(final PublicKey patientKey, final Record record) throws SecurityLibraryException {
         createPatientListIfDoesNotExist(patientKey);
         try {
             byte[] iv = AES.generateIV(16);
@@ -54,7 +58,7 @@ public class SecureDataStore implements DataStore {
         } catch (NoSuchAlgorithmException | IOException | InvalidKeyException | NoSuchPaddingException |
                 InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
-            throw new ServerCipherException();
+            throw new SecurityLibraryException(e);
         }
     }
 

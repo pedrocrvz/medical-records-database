@@ -1,11 +1,13 @@
 package pt.ulisboa.tecnico.sirs;
 
+import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
 import sun.security.x509.X500Name;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.*;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
@@ -33,7 +35,7 @@ public abstract class Entity {
     }
 
     final byte[] signBytes(byte[] bytesToSign)
-            throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+            throws SecurityLibraryException {
         return DigitalSignature.makeDigitalSignature(bytesToSign, privateKey);
     }
 
@@ -49,6 +51,9 @@ public abstract class Entity {
         return null;
     }
 
+    final public Certificate getCertificate(){
+        return certificate;
+    }
 
     public static String toBase64(byte[] bytes){
         Base64.Encoder encoder = Base64.getEncoder();

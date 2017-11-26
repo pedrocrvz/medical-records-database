@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.sirs;
 
+import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
 
 import java.io.Serializable;
@@ -14,7 +15,7 @@ public class SecureRecord extends Record implements Serializable {
     private final byte[] signature;
 
     public SecureRecord(final PublicKey dk, final PublicKey pk, final String r, final Doctor d)
-            throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+            throws SecurityLibraryException {
         super(dk, pk, r);
         signature = d.signBytes(getBytes());
     }
@@ -22,12 +23,10 @@ public class SecureRecord extends Record implements Serializable {
     /**
      * This method verifies if the signature of record is valid
      * @return Returns whether this Record is secure or not
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws SignatureException
+     * @throws SecurityLibraryException Is thrown whenever Security library runs into trouble
      */
     public boolean hasValidSignature()
-            throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+            throws SecurityLibraryException {
         return DigitalSignature.isValidSignature(getDoctorPublicKey(), getBytes(), signature);
     }
 

@@ -2,12 +2,9 @@ package pt.ulisboa.tecnico.sirs;
 
 import pt.ulisboa.tecnico.sirs.data.DataStore;
 import pt.ulisboa.tecnico.sirs.data.SecureDataStore;
-import pt.ulisboa.tecnico.sirs.exception.ServerCipherException;
+import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
-import javax.rmi.ssl.SslRMIServerSocketFactory;
 import java.io.IOException;
-import java.net.BindException;
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
@@ -29,13 +26,13 @@ public class NHS extends Entity implements NHSInterface {
     }
 
     @Override
-    public List<Record> getRecords(PublicKey patient) throws RemoteException, ServerCipherException {
+    public List<Record> getRecords(PublicKey patient) throws RemoteException, SecurityLibraryException {
         System.out.println("[NHS] Fetching records from " + toBase64(patient.getEncoded()));
         return ds.getRecords(patient);
     }
 
     @Override
-    public void putRecord(Record record) throws RemoteException, ServerCipherException {
+    public void putRecord(Record record) throws RemoteException, SecurityLibraryException {
         System.out.println("[NHS] Inserting record " + record);
         ds.putRecord(record.getPatientPublicKey(), record);
     }

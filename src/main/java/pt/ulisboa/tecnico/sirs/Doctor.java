@@ -1,25 +1,36 @@
 package pt.ulisboa.tecnico.sirs;
 
 import pt.ulisboa.tecnico.sirs.exception.NotAuthorizedException;
-import pt.ulisboa.tecnico.sirs.exception.ServerCipherException;
+import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.security.*;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.util.List;
 
 public class Doctor extends Entity {
-    public Doctor(KeyStore ks, String keyAlias, String ksPassword)
+    private final Hospital hospital;
+    public Doctor(KeyStore ks, String keyAlias, String ksPassword, Hospital hospital)
             throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
         super(ks, keyAlias, ksPassword);
+        this.hospital = hospital;
     }
 
+    /**
+     * Doctor writes a Patient record, and then sends it to NHS
+     * @param patient Patient
+     * @param record Record - whatever the doctor wants to write
+     * @throws RemoteException
+     * @throws NotBoundException
+     * @throws NotAuthorizedException
+     * @throws SecurityLibraryException
+     */
     public void writeRecord(final Patient patient, final String record)
-            throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, RemoteException,
-            NotBoundException, NotAuthorizedException, ServerCipherException {
+            throws NotAuthorizedException, SecurityLibraryException, RemoteException, NotBoundException {
         final SecureRecord sr = new SecureRecord(this.getPublicKey(), patient.getPublicKey(), record, this);
 
         getStub().putRecord(sr);
@@ -27,8 +38,12 @@ public class Doctor extends Entity {
     }
 
     public List<Record> getRecords(final Patient patient) throws RemoteException, NotBoundException,
-            NotAuthorizedException, ServerCipherException {
+            NotAuthorizedException, SecurityLibraryException {
         return getStub().getRecords(patient.getPublicKey());
+    }
+
+    public Certificate getHospitalCertificate() {
+        return hospital.getCertificate();
     }
 
     @Override
