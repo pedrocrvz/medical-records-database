@@ -6,10 +6,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 
 public class Patient extends Entity {
-    private Hospital hospital;
-
     public Patient(KeyStore ks, String keyAlias, String ksPassword)
             throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
         super(ks, keyAlias, ksPassword);
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{"+toBase64(getPublicKey().getEncoded())+"}";
     }
 }

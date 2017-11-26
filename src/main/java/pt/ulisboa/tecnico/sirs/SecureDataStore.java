@@ -9,6 +9,10 @@ import java.util.List;
 public class SecureDataStore implements DataStore {
     private HashMap<PublicKey, List<Record>> records;
 
+    public SecureDataStore(){
+        records = new HashMap<>();
+    }
+
     @Override
     public List<Record> getRecords(PublicKey patientKey) {
         createPatientListIfDoesNotExist(patientKey);

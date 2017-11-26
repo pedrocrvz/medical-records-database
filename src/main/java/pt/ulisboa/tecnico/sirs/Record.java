@@ -1,9 +1,12 @@
 package pt.ulisboa.tecnico.sirs;
 
+import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.Date;
 
-public class Record {
+import static pt.ulisboa.tecnico.sirs.Entity.toBase64;
+
+public abstract class Record implements Serializable {
     private final PublicKey doctorKey;
     private final PublicKey patientKey;
     private final Date date;
@@ -24,7 +27,29 @@ public class Record {
         return object.getBytes();
     }
 
+    public final PublicKey getPatientPublicKey() {
+        return patientKey;
+    }
+
     public final PublicKey getDoctorPublicKey() {
         return doctorKey;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getRecord() {
+        return record;
+    }
+
+    @Override
+    public String toString() {
+        return "Record{" +
+                "doctorKey=" + toBase64(doctorKey.getEncoded()) +
+                ", patientKey=" + toBase64(doctorKey.getEncoded()) +
+                ", date=" + date +
+                ", record='" + record + '\'' +
+                '}';
     }
 }

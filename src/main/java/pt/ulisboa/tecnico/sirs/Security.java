@@ -41,7 +41,7 @@ public class Security {
      * @throws InvalidKeyException
      * @throws SignatureException
      */
-    public byte[] makeDigitalSignature(byte[] bytesToSign, PrivateKey privateKey)
+    public static byte[] makeDigitalSignature(byte[] bytesToSign, PrivateKey privateKey)
             throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         Signature sig = Signature.getInstance(SIGNATURE_ALGORITHM);
         sig.initSign(privateKey);
@@ -56,7 +56,7 @@ public class Security {
      * @return randomBytes - byte[] with random suff
      * @throws NoSuchAlgorithmException
      */
-    private byte[] getSecureRandomNumber(int byteNumber)
+    private static byte[] getSecureRandomNumber(int byteNumber)
             throws NoSuchAlgorithmException {
         byte[] randomBytes = new byte[byteNumber];
         SecureRandom secureRandom = SecureRandom.getInstance(PRNG_ALGORITHM);
@@ -79,7 +79,7 @@ public class Security {
      * @throws BadPaddingException
      * @throws IllegalBlockSizeException
      */
-    public byte[] decryptBytes(byte[] bytesToDecrypt, Key aesKey, byte[] iv)
+    public static byte[] decryptBytes(byte[] bytesToDecrypt, Key aesKey, byte[] iv)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return doAES(bytesToDecrypt, aesKey, iv, Cipher.DECRYPT_MODE);
@@ -100,13 +100,13 @@ public class Security {
      * @throws BadPaddingException
      * @throws IllegalBlockSizeException
      */
-    public byte[] encryptBytes(byte[] bytesToEncrypt, Key aesKey, byte[] iv)
+    public static byte[] encryptBytes(byte[] bytesToEncrypt, Key aesKey, byte[] iv)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return doAES(bytesToEncrypt, aesKey, iv, Cipher.ENCRYPT_MODE);
     }
 
-    private byte[] doAES(byte[] bytesToEncrypt, Key aesKey, byte[] iv, int mode)
+    private static byte[] doAES(byte[] bytesToEncrypt, Key aesKey, byte[] iv, int mode)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         Cipher cipher = Cipher.getInstance(SYMMETRIC_ALGORITHM);

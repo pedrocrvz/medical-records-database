@@ -1,16 +1,22 @@
 package pt.ulisboa.tecnico.sirs;
 
+import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
+import java.security.PublicKey;
 import java.security.SignatureException;
 
-public class SecureRecord {
-    private final Record record;
-    private final byte[] signature;
+import static pt.ulisboa.tecnico.sirs.Entity.toBase64;
 
-    public SecureRecord(Record record, byte[] signature){
-        this.record = record;
+public class SecureRecord extends Record implements Serializable {
+    private byte[] signature;
+
+    public SecureRecord(final PublicKey doctorKey, final PublicKey patientKey,
+                        final String record) {
+        super(doctorKey, patientKey, record);
+    }
+
+    public void setSignature(byte[] signature) {
         this.signature = signature;
     }
 
@@ -21,11 +27,16 @@ public class SecureRecord {
      * @throws InvalidKeyException
      * @throws SignatureException
      */
-    public boolean hasValidSignature() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        byte[] object = record.getBytes();
-        Signature sig = Security.getSignature();
-        sig.initVerify(record.getDoctorPublicKey());
-        sig.update(object);
-        return sig.verify(signature);
+    public boolean hasValidSignature()
+            throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        return Security.isValidSignature(getDoctorPublicKey(), getBytes(), signature);
+    }
+
+    @Override
+    public String toString() {
+        return "SecureRecord{" +
+                "record=" + super.toString() +
+                ", signature=" + toBase64(signature) +
+                '}';
     }
 }

@@ -25,13 +25,13 @@ def remove_keys():
 
 def create_nhs():
 	print("Generating NHS")
-	exec_command('keytool -genkeypair -alias NHS -keystore NHS.jks -storepass '+password+' -validity 400 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN=NHS -noprompt -keypass '+password+' -ext bc:c=ca:true  -ext eku=sA')
+	exec_command('keytool -genkeypair -alias NHS -keystore NHS.jks -storepass '+password+' -validity 400 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN=NHS -noprompt -keypass '+password+' -ext bc:c=ca:true  -ext eku=sA -storetype pkcs12')
 	exec_command('keytool -keystore NHS.jks -alias NHS -exportcert -rfc -storepass '+password+' > NHS.crt')
 
 def create_hospital(id, num_doctors):
 	entity = "Hospital-"+str(id)
 	print("Generating " + entity)
-	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 300 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:true -ext eku=sA')
+	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 300 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:true -ext eku=sA -storetype pkcs12')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -alias '+entity+' -certreq -file '+entity+'.csr')
 	exec_command('keytool -keystore NHS.jks -storepass '+password+' -alias NHS -gencert -rfc -infile '+entity+'.csr -outfile '+entity+'.crt -validity 300 -ext bc=ca:true -ext eku=sA')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -keypass '+password+' -importcert -alias NHS -file NHS.crt -noprompt')
@@ -44,7 +44,7 @@ def create_doctor(id, num_hospital):
 	hospital = "Hospital-"+str(num_hospital)
 	entity = "Doctor-"+str(id)+"_"+hospital
 	print("Generating " + entity)
-	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 200 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:false -ext eku=sA -ext eku=cA')
+	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 200 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:false -ext eku=sA -ext eku=cA -storetype pkcs12')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -alias '+entity+' -certreq -file '+entity+'.csr')
 	exec_command('keytool -keystore '+hospital+'.jks -storepass '+password+' -alias '+hospital+' -gencert -rfc -infile '+entity+'.csr -outfile '+entity+'.crt -validity 200 -ext bc=ca:false -ext eku=sA')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -keypass '+password+' -importcert -alias '+hospital+' -file '+hospital+'.crt -noprompt')
@@ -53,7 +53,7 @@ def create_doctor(id, num_hospital):
 def create_patient(id):
 	entity = "Patient-"+str(id)
 	print("Generating " + entity)
-	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 200 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:false -ext eku=cA')
+	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 200 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:false -ext eku=cA -storetype pkcs12')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -alias '+entity+' -certreq -file '+entity+'.csr')
 	exec_command('keytool -keystore NHS.jks -storepass '+password+' -alias NHS -gencert -rfc -infile '+entity+'.csr -outfile '+entity+'.crt -validity 200 -ext bc=ca:false -ext eku=cA')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -keypass '+password+' -importcert -alias NHS -file NHS.crt -noprompt')
