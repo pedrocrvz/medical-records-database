@@ -6,6 +6,11 @@ cd keys
 ./gen-keys.py --h 1 --d 1 --p 1
 ```
 
+## Compile to Jar
+```
+mvn package
+```
+
 ## Start RMI Directory
 ```
 ./rmi &
