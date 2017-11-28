@@ -1,7 +1,11 @@
 package pt.ulisboa.tecnico.sirs;
 
+import pt.ulisboa.tecnico.sirs.authorization.Authorization;
+import pt.ulisboa.tecnico.sirs.authorization.FetchAuthorization;
+import pt.ulisboa.tecnico.sirs.authorization.PutAuthorization;
 import pt.ulisboa.tecnico.sirs.data.DataStore;
 import pt.ulisboa.tecnico.sirs.data.SecureDataStore;
+import pt.ulisboa.tecnico.sirs.exception.NotAuthorizedException;
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 
 import java.io.IOException;
@@ -26,13 +30,20 @@ public class NHS extends Entity implements NHSInterface {
     }
 
     @Override
-    public List<Record> getRecords(PublicKey patient) throws RemoteException, SecurityLibraryException {
+    public List<Record> getRecords(FetchAuthorization authorization, PublicKey patient)
+            throws RemoteException, SecurityLibraryException, NotAuthorizedException {
+        if(!authorization.isValid()) throw new NotAuthorizedException();
+
         System.out.println("[NHS] Fetching records from " + toBase64(patient.getEncoded()));
         return ds.getRecords(patient);
     }
 
     @Override
-    public void putRecord(Record record) throws RemoteException, SecurityLibraryException {
+    public void putRecord(PutAuthorization authorization, Record record)
+            throws RemoteException, SecurityLibraryException, NotAuthorizedException {
+        if(!authorization.isValid()) throw new NotAuthorizedException();
+        if(!authorization.getDoctorCertificate().getPublicKey().equals(record.getDoctorPublicKey())) throw new NotAuthorizedException();
+
         System.out.println("[NHS] Inserting record " + record);
         ds.putRecord(record.getPatientPublicKey(), record);
     }

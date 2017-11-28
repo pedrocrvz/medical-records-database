@@ -4,8 +4,10 @@ import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
 import sun.security.x509.X500Name;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -69,6 +71,16 @@ public abstract class Entity {
         return toBase64(publicKeyBytes);
     }
 
+    /**
+     * Loads a KeyStore from the file system
+     * @param path Path to the keystore
+     * @param password Password to open keystore
+     * @return Returns the keystore
+     * @throws IOException
+     * @throws KeyStoreException
+     * @throws CertificateException
+     * @throws NoSuchAlgorithmException
+     */
     public static KeyStore loadKeyStore(String path, String password)
             throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
         FileInputStream is = new FileInputStream(path);
@@ -76,5 +88,33 @@ public abstract class Entity {
         KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
         keystore.load(is, password.toCharArray());
         return keystore;
+    }
+
+    /**
+     * This method concatenates multiple byte array into a single one
+     * @param arrays the list of byte array
+     * @return A single concatenated byte array
+     */
+    public static byte[] concat(byte[]... arrays){
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        for (byte[] b : arrays) {
+            os.write(b, 0, b.length);
+        }
+        return os.toByteArray();
+    }
+
+    /**
+     * This method transforms an object into a byte array
+     * @param obj Object
+     * @return A byte array containing the object
+     * @throws IOException
+     */
+    public static byte[] toByteArray(Object obj) throws IOException {
+        try(ByteArrayOutputStream b = new ByteArrayOutputStream()){
+            try(ObjectOutputStream o = new ObjectOutputStream(b)){
+                o.writeObject(obj);
+            }
+            return b.toByteArray();
+        }
     }
 }
