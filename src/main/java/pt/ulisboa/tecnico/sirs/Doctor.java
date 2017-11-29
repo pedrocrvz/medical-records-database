@@ -31,15 +31,15 @@ public class Doctor extends Entity {
      */
     public void writeRecord(final Patient patient, final String record)
             throws NotAuthorizedException, SecurityLibraryException, RemoteException, NotBoundException {
-        final SecureRecord sr = new SecureRecord(this.getPublicKey(), patient.getPublicKey(), record, this);
+        final SecureRecord sr = new SecureRecord(this.getCertificate(), patient.getCertificate(), record, this);
 
-        getStub().putRecord(sr);
+        getStub().putRecord(hospital.authorizePutRecord(sr), sr);
         System.out.println("Record sent to NHS");
     }
 
     public List<Record> getRecords(final Patient patient) throws RemoteException, NotBoundException,
             NotAuthorizedException, SecurityLibraryException {
-        return getStub().getRecords(patient.getPublicKey());
+        return getStub().getRecords(hospital.authorizeFetchRecord(this, patient), patient.getPublicKey());
     }
 
     public Certificate getHospitalCertificate() {

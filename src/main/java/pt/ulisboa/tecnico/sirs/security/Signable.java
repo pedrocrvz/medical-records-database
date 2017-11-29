@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.sirs.security;
 
+import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
+
 import java.io.IOException;
 
 /**
@@ -10,5 +12,5 @@ public interface Signable {
      * This method returns the object bytes to be signed by an entity
      * @return byte array corresponding to class object
      */
-    byte[] getBytes();
+    byte[] getBytes() throws SecurityLibraryException;
 }

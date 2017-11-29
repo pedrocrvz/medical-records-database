@@ -1,12 +1,16 @@
 package pt.ulisboa.tecnico.sirs;
 
+import pt.ulisboa.tecnico.sirs.authorization.FetchAuthorization;
+import pt.ulisboa.tecnico.sirs.authorization.PutAuthorization;
 import pt.ulisboa.tecnico.sirs.exception.NotAuthorizedException;
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
+import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
 
 import java.io.IOException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.security.*;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.util.List;
 
@@ -15,6 +19,28 @@ public class Hospital extends Entity {
     public Hospital(KeyStore ks, String keyAlias, String ksPassword)
             throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
         super(ks, keyAlias, ksPassword);
+    }
+
+    public PutAuthorization authorizePutRecord(SecureRecord record) throws SecurityLibraryException {
+        return new PutAuthorization(
+                record,
+                this.getCertificate(),
+                record.getDoctorCertificate(),
+                record.getPatientCertificate(),
+                signBytes(record.getBytes())
+        );
+    }
+
+    public FetchAuthorization authorizeFetchRecord(Doctor doctor, Patient patient) throws SecurityLibraryException {
+        try {
+            return new FetchAuthorization(
+                    this.getCertificate(),
+                    doctor.getCertificate(),
+                    patient.getCertificate(),
+                    signBytes(concat(doctor.getCertificate().getEncoded(), patient.getCertificate().getEncoded())));
+        } catch (CertificateEncodingException e) {
+            throw new SecurityLibraryException(e);
+        }
     }
 
     public static void main(String[] args){

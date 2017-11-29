@@ -4,10 +4,11 @@ import pt.ulisboa.tecnico.sirs.SecureRecord;
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
 
+import java.io.Serializable;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 
-public abstract class Authorization {
+public abstract class Authorization implements Serializable {
     final Certificate hospitalCertificate;
     final Certificate doctorCertificate;
     final Certificate patientCertificate;
