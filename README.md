@@ -16,17 +16,11 @@ mvn package
 ./rmi &
 ```
 
-## Compile project
+## Run NHS example
 ```
-mvn compile
-```
-
-## Run NHS
-```
-mvn exec:java -Dexec.mainClass="pt.ulisboa.tecnico.sirs.NHS" -Dexec.args="keys/NHS.jks NHS password123"
+java -cp target/medical-records-database-1.0-SNAPSHOT-jar-with-dependencies.jar pt.ulisboa.tecnico.sirs.NHS
 ``` 
 
 ## Run Hospital example
 ```
-mvn compile exec:java -Dexec.mainClass="pt.ulisboa.tecnico.sirs.Hospital" -Dexec.args="keys/Hospital-1.jks Hospital-1 password123"
-```
+java -cp target/medical-records-database-1.0-SNAPSHOT-jar-with-dependencies.jar pt.ulisboa.tecnico.sirs.Hospital```
