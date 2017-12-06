@@ -1,11 +1,13 @@
 package pt.ulisboa.tecnico.sirs.authorization;
 
+import pt.ulisboa.tecnico.sirs.Entity;
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
 
 import java.io.Serializable;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
+import java.util.Arrays;
 
 import static pt.ulisboa.tecnico.sirs.Entity.concat;
 

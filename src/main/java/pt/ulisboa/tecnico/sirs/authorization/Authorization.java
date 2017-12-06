@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.sirs.authorization;
 
+import pt.ulisboa.tecnico.sirs.Entity;
 import pt.ulisboa.tecnico.sirs.SecureRecord;
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
@@ -34,4 +35,14 @@ public abstract class Authorization implements Serializable {
     }
 
     public abstract boolean isValid() throws SecurityLibraryException;
+
+    @Override
+    public String toString() {
+        return "Authorization{" +
+                "hospitalCertificate=" + hospitalCertificate +
+                ", doctorCertificate=" + doctorCertificate +
+                ", patientCertificate=" + patientCertificate +
+                ", hospitalSignature=" + Entity.toBase64(hospitalSignature) +
+                '}';
+    }
 }

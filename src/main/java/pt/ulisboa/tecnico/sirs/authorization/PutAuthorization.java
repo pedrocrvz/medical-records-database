@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.sirs.authorization;
 
+import pt.ulisboa.tecnico.sirs.Entity;
 import pt.ulisboa.tecnico.sirs.SecureRecord;
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;

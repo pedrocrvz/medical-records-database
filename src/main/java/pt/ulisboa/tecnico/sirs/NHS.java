@@ -1,12 +1,13 @@
 package pt.ulisboa.tecnico.sirs;
 
-import pt.ulisboa.tecnico.sirs.authorization.Authorization;
 import pt.ulisboa.tecnico.sirs.authorization.FetchAuthorization;
 import pt.ulisboa.tecnico.sirs.authorization.PutAuthorization;
 import pt.ulisboa.tecnico.sirs.data.DataStore;
 import pt.ulisboa.tecnico.sirs.data.SecureDataStore;
 import pt.ulisboa.tecnico.sirs.exception.NotAuthorizedException;
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
+import pt.ulisboa.tecnico.sirs.rmi.TLSClientSocketFactory;
+import pt.ulisboa.tecnico.sirs.rmi.TLSServerSocketFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -50,16 +51,20 @@ public class NHS extends Entity implements NHSInterface {
 
     public static void main(String[] args){
         try {
+            System.setProperty("javax.net.ssl.keyStore", "keys/NHS.jks");
+            System.setProperty("javax.net.ssl.keyStorePassword", "password123");
+            System.setProperty("javax.net.ssl.trustStore", "keys/truststore.jks");
+            System.setProperty("javax.net.ssl.trustStorePassword", "password123");
+            //System.setProperty("javax.net.debug", "ssl");
+
             NHS nhs = new NHS(loadKeyStore(args[0], args[2]), args[1], args[2]);
-            NHSInterface stub = (NHSInterface) UnicastRemoteObject.exportObject(nhs, 0);
 
-
-            //SslRMIClientSocketFactory clientSocketFactory = new SslRMIClientSocketFactory();
-            //SslRMIServerSocketFactory serverSocketFactory = new SslRMIServerSocketFactory();
+            TLSClientSocketFactory clientSocketFactory = new TLSClientSocketFactory();
+            TLSServerSocketFactory serverSocketFactory = new TLSServerSocketFactory();
+            NHSInterface stub = (NHSInterface) UnicastRemoteObject.exportObject(nhs, 0, clientSocketFactory, serverSocketFactory);
 
             // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();
-            //Registry registry = LocateRegistry.createRegistry(9000, clientSocketFactory, serverSocketFactory);
             System.out.println("Binding NHS");
             registry.bind("NHS", stub);
 
