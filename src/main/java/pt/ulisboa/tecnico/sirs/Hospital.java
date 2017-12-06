@@ -51,13 +51,9 @@ public class Hospital extends Entity {
             System.setProperty("javax.net.ssl.trustStorePassword", "password123");
             System.setProperty("javax.net.debug", "ssl");
 
-            Hospital hospital = new Hospital(loadKeyStore(args[0], args[2]), args[1], args[2]);
+            Hospital hospital = new Hospital(loadKeyStore("keys/Hospital-1.jks", "password123"), "Hospital-1", "password123");
             Doctor doctor = new Doctor(loadKeyStore("keys/Doctor-1_Hospital-1.jks", "password123"), "Doctor-1_Hospital-1", "password123", hospital);
             Patient patient = new Patient(loadKeyStore("keys/Patient-1.jks", "password123"), "Patient-1", "password123");
-
-            System.out.println(doctor.getEntityName());
-            System.out.println(patient.getEntityName());
-
 
             doctor.writeRecord(patient, "O paciente mostra indícos de ALS");
             doctor.writeRecord(patient, "O paciente xyz");

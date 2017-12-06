@@ -51,13 +51,17 @@ public class NHS extends Entity implements NHSInterface {
 
     public static void main(String[] args){
         try {
-            System.setProperty("javax.net.ssl.keyStore", "keys/NHS.jks");
-            System.setProperty("javax.net.ssl.keyStorePassword", "password123");
+            String entity = "NHS";
+            String keystore = "keys/"+entity+".jks";
+            String password = "password123";
+
+            System.setProperty("javax.net.ssl.keyStore", keystore);
+            System.setProperty("javax.net.ssl.keyStorePassword", password);
             System.setProperty("javax.net.ssl.trustStore", "keys/truststore.jks");
-            System.setProperty("javax.net.ssl.trustStorePassword", "password123");
+            System.setProperty("javax.net.ssl.trustStorePassword", password);
             System.setProperty("javax.net.debug", "ssl");
 
-            NHS nhs = new NHS(loadKeyStore(args[0], args[2]), args[1], args[2]);
+            NHS nhs = new NHS(loadKeyStore(keystore, password), entity, password);
 
             TLSClientSocketFactory clientSocketFactory = new TLSClientSocketFactory();
             TLSServerSocketFactory serverSocketFactory = new TLSServerSocketFactory();
