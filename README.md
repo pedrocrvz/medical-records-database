@@ -23,4 +23,4 @@ java -cp target/medical-records-database-1.0-SNAPSHOT-jar-with-dependencies.jar 
 
 ## Run Hospital example
 ```
-java -cp target/medical-records-database-1.0-SNAPSHOT-jar-with-dependencies.jar pt.ulisboa.tecnico.sirs.Hospital```
+java -cp target/medical-records-database-1.0-SNAPSHOT-jar-with-dependencies.jar pt.ulisboa.tecnico.sirs.Hospital
