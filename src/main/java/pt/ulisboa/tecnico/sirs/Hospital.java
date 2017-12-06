@@ -49,7 +49,7 @@ public class Hospital extends Entity {
             System.setProperty("javax.net.ssl.keyStorePassword", "password123");
             System.setProperty("javax.net.ssl.trustStore", "keys/truststore.jks");
             System.setProperty("javax.net.ssl.trustStorePassword", "password123");
-            //System.setProperty("javax.net.debug", "ssl");
+            System.setProperty("javax.net.debug", "ssl");
 
             Hospital hospital = new Hospital(loadKeyStore(args[0], args[2]), args[1], args[2]);
             Doctor doctor = new Doctor(loadKeyStore("keys/Doctor-1_Hospital-1.jks", "password123"), "Doctor-1_Hospital-1", "password123", hospital);
@@ -69,14 +69,18 @@ public class Hospital extends Entity {
             }
         } catch( NotAuthorizedException e){
             System.out.println("Not authorized to perform action");
+            e.printStackTrace();
         } catch (NotBoundException e) {
             System.out.println("RMI Registry error: " + e.getMessage() + " was not found");
+            e.printStackTrace();
             System.exit(1);
         } catch (SecurityLibraryException e) {
             System.out.println("Server ran into problems :\\");
+            e.printStackTrace();
             System.exit(1);
         } catch (ConnectException e) {
             System.out.println("Connection error: could not connect to RMI registry");
+            e.printStackTrace();
             System.exit(1);
         } catch (UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException |
                 CertificateException | IOException e) {

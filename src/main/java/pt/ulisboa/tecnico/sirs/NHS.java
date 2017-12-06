@@ -55,7 +55,7 @@ public class NHS extends Entity implements NHSInterface {
             System.setProperty("javax.net.ssl.keyStorePassword", "password123");
             System.setProperty("javax.net.ssl.trustStore", "keys/truststore.jks");
             System.setProperty("javax.net.ssl.trustStorePassword", "password123");
-            //System.setProperty("javax.net.debug", "ssl");
+            System.setProperty("javax.net.debug", "ssl");
 
             NHS nhs = new NHS(loadKeyStore(args[0], args[2]), args[1], args[2]);
 
@@ -81,12 +81,15 @@ public class NHS extends Entity implements NHSInterface {
 
         } catch (ExportException e){
             System.out.println("Starting error: port is in use, is NHS already up?");
+            e.printStackTrace();
             System.exit(1);
         } catch (ConnectException e){
             System.out.println("Connection error: could not connect to RMI registry");
+            e.printStackTrace();
             System.exit(1);
         } catch (AlreadyBoundException e){
             System.out.println("RMI Registry error: " + e.getMessage() + " is already assigned");
+            e.printStackTrace();
             System.exit(1);
         } catch (NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException | CertificateException |
                 IOException e) {
