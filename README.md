@@ -1,5 +1,7 @@
 # medical-records-database
 
+# Documentation is included in this folder, read carefully to understand with in-depth knowledge this project implementation
+
 ## Key generation (1 hospital, 1 doctor/hospital, 1 patient)
 ```
 cd keys
@@ -24,3 +26,5 @@ java -cp target/medical-records-database-1.0-SNAPSHOT-jar-with-dependencies.jar 
 ## Run Hospital example
 ```
 java -cp target/medical-records-database-1.0-SNAPSHOT-jar-with-dependencies.jar pt.ulisboa.tecnico.sirs.Hospital
+
+
