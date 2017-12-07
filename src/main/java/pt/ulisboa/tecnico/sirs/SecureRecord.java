@@ -11,6 +11,9 @@ import java.security.cert.Certificate;
 import static pt.ulisboa.tecnico.sirs.Entity.concat;
 import static pt.ulisboa.tecnico.sirs.Entity.toBase64;
 
+/**
+ * SecureRecord extends Record, and fulfills integrity and authenticity requirements for patient records
+ */
 public class SecureRecord extends Record implements Serializable, Signable {
     private final byte[] doctorSignature;
 
@@ -20,6 +23,10 @@ public class SecureRecord extends Record implements Serializable, Signable {
         doctorSignature = d.signBytes(super.getBytes());
     }
 
+    /**
+     * This method transforms the Secure Record in a byte array, useful to be signed or verified
+     * @return Returns the object in a byte array
+     */
     public byte[] getBytes() throws SecurityLibraryException {
         return concat(
                 super.getBytes(),

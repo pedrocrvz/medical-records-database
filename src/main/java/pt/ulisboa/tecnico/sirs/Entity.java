@@ -2,7 +2,6 @@ package pt.ulisboa.tecnico.sirs;
 
 import pt.ulisboa.tecnico.sirs.exception.SecurityLibraryException;
 import pt.ulisboa.tecnico.sirs.security.DigitalSignature;
-import sun.security.x509.X500Name;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -11,9 +10,11 @@ import java.io.ObjectOutputStream;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Base64;
 
+/**
+ * Class that defines an Entity in the project
+ */
 public abstract class Entity {
     private final PrivateKey privateKey;
     private final java.security.cert.Certificate certificate;
@@ -28,32 +29,20 @@ public abstract class Entity {
      * This method returns this entity's PublicKey
      * @return Returns PublicKey
      */
-    final public PublicKey getPublicKey(){
+    public PublicKey getPublicKey(){
         return certificate.getPublicKey();
     }
 
-    final public String getBase64PublicKey(){
+    public String getBase64PublicKey(){
         return getBase64PublicKey(this.getPublicKey());
     }
 
-    final byte[] signBytes(byte[] bytesToSign)
+    byte[] signBytes(byte[] bytesToSign)
             throws SecurityLibraryException {
         return DigitalSignature.makeDigitalSignature(bytesToSign, privateKey);
     }
 
-    final public String getEntityName(){
-        if (certificate instanceof X509Certificate) {
-            X509Certificate x509cert = (X509Certificate) certificate;
-            try {
-                return X500Name.asX500Name(x509cert.getSubjectX500Principal()).getCommonName();
-            } catch (IOException e) {
-                return null;
-            }
-        }
-        return null;
-    }
-
-    final public Certificate getCertificate(){
+    public Certificate getCertificate(){
         return certificate;
     }
 

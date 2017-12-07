@@ -12,6 +12,9 @@ import java.security.cert.CertificateEncodingException;
 import static pt.ulisboa.tecnico.sirs.Entity.concat;
 import static pt.ulisboa.tecnico.sirs.Entity.toBase64;
 
+/**
+ * Abstract class that defines the structure of a patient record
+ */
 public abstract class Record implements Serializable, Signable {
     private final Certificate doctorCertificate;
     private final Certificate patientCertificate;

@@ -9,6 +9,10 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.*;
 
+/**
+ * Defines methods that call Java implemented signature checking and signing libraries.
+ * Uses SHA256WithRSA algorithm to sign
+ */
 public class DigitalSignature {
     public static String SIGNATURE_ALGORITHM = "SHA256WithRSA";
 

@@ -5,6 +5,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 
+/**
+ * Patient class extending abstract Entity
+ */
 public class Patient extends Entity {
     public Patient(KeyStore ks, String keyAlias, String ksPassword)
             throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {

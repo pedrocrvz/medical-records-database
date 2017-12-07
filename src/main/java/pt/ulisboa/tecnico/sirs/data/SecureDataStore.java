@@ -31,6 +31,12 @@ public class SecureDataStore implements DataStore {
         this.key = key;
     }
 
+    /**
+     * This method returns all records for a patient with given PublicKey
+     * @param patientKey Patient's PublicKey
+     * @return Returns a List containing all Patient records
+     * @throws SecurityLibraryException This is thrown in case of a catastrophe in AES library
+     */
     @Override
     public final List<Record> getRecords(final PublicKey patientKey) throws SecurityLibraryException {
         createPatientListIfDoesNotExist(patientKey);
@@ -48,6 +54,12 @@ public class SecureDataStore implements DataStore {
         return records;
     }
 
+    /**
+     * This method will insert a record Record for a patient with given PublicKey patientkey
+     * @param patientKey Patient's PublicKey
+     * @param record Record to insert
+     * @throws SecurityLibraryException This is thrown in case of a catastrophe in AES library
+     */
     @Override
     public void putRecord(final PublicKey patientKey, final Record record) throws SecurityLibraryException {
         createPatientListIfDoesNotExist(patientKey);

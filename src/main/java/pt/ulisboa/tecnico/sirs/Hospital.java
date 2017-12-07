@@ -14,6 +14,9 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.util.List;
 
+/**
+ * Hospital class extending abstract Entity
+ */
 public class Hospital extends Entity {
 
     public Hospital(KeyStore ks, String keyAlias, String ksPassword)
@@ -21,6 +24,12 @@ public class Hospital extends Entity {
         super(ks, keyAlias, ksPassword);
     }
 
+    /**
+     * This method returns a signed authorization that the NHS will accept
+     * @param record Record that will be sent along with this authorization
+     * @return Returns an authorization
+     * @throws SecurityLibraryException Thrown when digital signatures library runs into problem
+     */
     public PutAuthorization authorizePutRecord(SecureRecord record) throws SecurityLibraryException {
         return new PutAuthorization(
                 record,
@@ -31,6 +40,13 @@ public class Hospital extends Entity {
         );
     }
 
+    /**
+     * This method returns a signed authorization that the NHS will accept
+     * @param doctor Doctor responsible for patient
+     * @param patient Patient that is being evaluated
+     * @return Returns an authorization
+     * @throws SecurityLibraryException Thrown when digital signatures library runs into problem
+     */
     public FetchAuthorization authorizeFetchRecord(Doctor doctor, Patient patient) throws SecurityLibraryException {
         try {
             return new FetchAuthorization(

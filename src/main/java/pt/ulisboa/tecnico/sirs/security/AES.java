@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.*;
 
+/**
+ * Defines methods to encrypt and decrypt data using Java AES implementation
+ * Uses AES/CBC/PKCS5Padding AES cipher, and SHA1PRNG to generate secure random IVs
+ */
 public class AES {
     public static String PRNG_ALGORITHM = "SHA1PRNG";
     public static String SYMMETRIC_ALGORITHM = "AES/CBC/PKCS5Padding";

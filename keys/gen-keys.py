@@ -36,7 +36,7 @@ def create_hospital(id, num_doctors):
 	print("Generating " + entity)
 	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 300 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:true -ext eku=sA -storetype pkcs12')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -alias '+entity+' -certreq -file '+entity+'.csr')
-	exec_command('keytool -keystore NHS.jks -storepass '+password+' -alias NHS -gencert -rfc -infile '+entity+'.csr -outfile '+entity+'.crt -validity 300 -ext bc=ca:true -ext eku=sA')
+	exec_command('keytool -keystore NHS.jks -storepass '+password+' -alias NHS -gencert -rfc -infile '+entity+'.csr -outfile '+entity+'.crt -validity 300 -ext bc=ca:true -ext eku=sA,cA')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -keypass '+password+' -importcert -alias NHS -file NHS.crt -noprompt')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -keypass '+password+' -importcert -alias '+entity+' -file '+entity+'.crt')
 	for i in range(1, num_doctors+1):
@@ -49,7 +49,7 @@ def create_doctor(id, num_hospital):
 	print("Generating " + entity)
 	exec_command('keytool -genkeypair -alias '+entity+' -keystore '+entity+'.jks -storepass '+password+' -validity 200 -keysize '+keysize+' -sigalg SHA256withRSA -keyalg RSA -dname CN='+entity+' -noprompt -keypass '+password+' -ext bc:c=ca:false -ext eku=sA -ext eku=cA -storetype pkcs12')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -alias '+entity+' -certreq -file '+entity+'.csr')
-	exec_command('keytool -keystore '+hospital+'.jks -storepass '+password+' -alias '+hospital+' -gencert -rfc -infile '+entity+'.csr -outfile '+entity+'.crt -validity 200 -ext bc=ca:false -ext eku=cA')
+	exec_command('keytool -keystore '+hospital+'.jks -storepass '+password+' -alias '+hospital+' -gencert -rfc -infile '+entity+'.csr -outfile '+entity+'.crt -validity 200 -ext bc=ca:false -ext eku=sA,cA')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -keypass '+password+' -importcert -alias '+hospital+' -file '+hospital+'.crt -noprompt')
 	exec_command('keytool -keystore '+entity+'.jks -storepass '+password+' -keypass '+password+' -importcert -alias '+entity+' -file '+entity+'.crt')
 
