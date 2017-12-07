@@ -2,6 +2,8 @@
 
 # Documentation is included in this folder, read carefully to understand with in-depth knowledge this project implementation
 
+Project was developed and tested with Ubuntu 16.04, OpenJDK 1.8.0_151, Maven 3.3.9, and Python 3.5.2
+
 ## Key generation (1 hospital, 1 doctor/hospital, 1 patient)
 ```
 cd keys
